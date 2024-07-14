@@ -1,20 +1,10 @@
-from pathlib import (
-    Path,
-)
-from typing import (
-    Any,
-    Dict,
-    List,
-)
+from pathlib import Path
+from typing import Any, Dict, List
 
 import pytest
 
-from tests.utils import (
-    regression_test,
-)
-from turingtoy import (
-    run_turing_machine,
-)
+from tests.utils import regression_test
+from turingtoy import run_turing_machine
 
 
 def test_turing_machine_double_1(
@@ -71,6 +61,107 @@ def test_turing_machine_double_1(
     output, execution_history, accepted = run_turing_machine(machine, "1")
     assert output == "101"
     assert accepted
+
+    regression_test(
+        {
+            "machine": machine,
+            "input": input_,
+            "output": output,
+            "execution_history": execution_history,
+        },
+        datadir / f"{input_}.json",
+        request.config.getoption("force_regen"),
+    )
+
+
+def test_turing_machine_unknown_state(
+    request: pytest.FixtureRequest, global_datadir: Path
+) -> None:
+    machine = {
+        "blank": "0",
+        "start state": "e1",
+        "final states": ["done"],
+        "table": {
+            "e1": {
+                "0": {"L": "done"},
+                "1": {"write": "0", "R": "e8"},
+            },
+            "e2": {
+                "1": {"write": "1", "R": "e2"},
+                "0": {"write": "0", "R": "e3"},
+            },
+            "e3": {
+                "1": {"write": "1", "R": "e3"},
+                "0": {"write": "1", "L": "e4"},
+            },
+            "e4": {
+                "1": {"write": "1", "L": "e4"},
+                "0": {"write": "0", "L": "e5"},
+            },
+            "e5": {
+                "1": {"write": "1", "L": "e5"},
+                "0": {"write": "1", "R": "e1"},
+            },
+        },
+    }
+
+    datadir = global_datadir / "unknown_state"
+
+    input_ = "111"
+    output, execution_history, accepted = run_turing_machine(machine, input_)
+    assert output == "Invalid state: e8"
+    assert not accepted
+
+    regression_test(
+        {
+            "machine": machine,
+            "input": input_,
+            "output": output,
+            "execution_history": execution_history,
+        },
+        datadir / f"{input_}.json",
+        request.config.getoption("force_regen"),
+    )
+
+
+def test_turing_machine_unknown_symbol(
+    request: pytest.FixtureRequest, global_datadir: Path
+) -> None:
+    machine = {
+        "blank": "0",
+        "start state": "e1",
+        "final states": ["done"],
+        "table": {
+            "e1": {
+                "0": {"L": "done"},
+                "1": {"write": "0", "R": "e2"},
+            },
+            "e2": {
+                "1": {"write": "1", "R": "e2"},
+                "0": {"write": "0", "R": "e3"},
+            },
+            "e3": {
+                "1": {"write": "1", "R": "e3"},
+                "0": {"write": "1", "L": "e4"},
+            },
+            "e4": {
+                "1": {"write": "1", "L": "e4"},
+                "0": {"write": "0", "L": "e5"},
+            },
+            "e5": {
+                "1": {"write": "1", "L": "e5"},
+                "0": {"write": "1", "R": "e1"},
+            },
+            "done": {},
+        },
+    }
+
+    datadir = global_datadir / "unknown_symbol"
+
+    input_ = "1112"
+    output, execution_history, accepted = run_turing_machine(machine, input_)
+    assert output == "Invalid symbol: `2` @(p:3)"
+    assert not accepted
 
     regression_test(
         {
