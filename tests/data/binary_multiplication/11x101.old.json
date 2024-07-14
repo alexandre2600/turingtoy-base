@@ -241,15 +241,6 @@
       }
     },
     {
-      "state": "start",
-      "reading": "1",
-      "position": 0,
-      "memory": "11*101",
-      "transition": {
-        "L": "init"
-      }
-    },
-    {
       "state": "init",
       "reading": " ",
       "position": 0,

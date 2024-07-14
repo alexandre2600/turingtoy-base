@@ -72,16 +72,6 @@
       }
     },
     {
-      "state": "e1",
-      "reading": "1",
-      "position": 0,
-      "memory": "1",
-      "transition": {
-        "write": "0",
-        "R": "e2"
-      }
-    },
-    {
       "state": "e2",
       "reading": "0",
       "position": 1,

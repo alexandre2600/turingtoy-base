@@ -140,13 +140,6 @@
     },
     {
       "state": "right",
-      "reading": "1",
-      "position": 0,
-      "memory": "1011+11001",
-      "transition": "R"
-    },
-    {
-      "state": "right",
       "reading": "0",
       "position": 1,
       "memory": "1011+11001",

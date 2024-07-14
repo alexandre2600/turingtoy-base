@@ -141,13 +141,6 @@
     {
       "state": "right",
       "reading": "1",
-      "position": 0,
-      "memory": "11+1",
-      "transition": "R"
-    },
-    {
-      "state": "right",
-      "reading": "1",
       "position": 1,
       "memory": "11+1",
       "transition": "R"
